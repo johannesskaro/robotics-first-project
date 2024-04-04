@@ -10,4 +10,13 @@ catkin_package()
 ## Build talker and listener
 include_directories(include ${catkin_INCLUDE_DIRS})
 
+add_executable(gps_to_odom src/gps_to_odom.cpp)
+target_link_libraries(gps_to_odom ${catkin_LIBRARIES})
+
+add_executable(odom_to_tf src/odom_to_tf.cpp)
+target_link_libraries(odom_to_tf ${catkin_LIBRARIES})
+
+add_executable(lidar_visualization src/lidar_visualization.cpp)
+target_link_libraries(lidar_visualization ${catkin_LIBRARIES})
+
 

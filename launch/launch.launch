@@ -1,0 +1,7 @@
+<launch>
+<node pkg="first_project" type = "gps_to_odom" name = "gps_to_odom"/>
+<node pkg="first_project" type = "odom_to_tf" name = "odom_to_tf"/>
+<node pkg="first_project" type = "lidar_visualization" name = "lidar_visualization"/>
+
+</launch>
+
