@@ -13,9 +13,9 @@ private:
   ros::Publisher gps_odom_pub = n.advertise<nav_msgs::Odometry>("gps_odom", 1);
   ros::Subscriber gps_sub;
 
-  double lat_ref;
-  double lon_ref;
-  double alt_ref;
+  double lat_ref_deg;
+  double lon_ref_deg;
+  double alt_ref_deg;
 
   double a = 6378137; // Semi-major axis of earth given in meters
   double b = 6356752; // Semi-minor axis of earth given in meters
@@ -28,15 +28,19 @@ private:
 public:
   gps_to_odom() {
     gps_sub = n.subscribe("/fix", 1, &gps_to_odom::gps_callback, this);
-    n.getParam("lat_r", lat_ref);
-    n.getParam("lon_r", lon_ref);
-    n.getParam("alt_r", alt_ref);
+    n.getParam("lat_r", lat_ref_deg);
+    n.getParam("lon_r", lon_ref_deg);
+    n.getParam("alt_r", alt_ref_deg);
   }
 
   void gps_callback(const sensor_msgs::NavSatFix::ConstPtr& msg) {
-    double lat = msg->latitude;
-    double lon = msg->longitude;
-    double alt = msg->altitude;
+    double lat = msg->latitude * (M_PI / 180);
+    double lon = msg->longitude * (M_PI / 180);
+    double alt = msg->altitude * (M_PI / 180);
+
+    double lat_ref = lat_ref_deg * (M_PI / 180);
+    double lon_ref = lon_ref_deg * (M_PI / 180);
+    double alt_ref = alt_ref_deg * (M_PI / 180);
 
     // convert from latitude-longitude-altitude to Cartesian ECEF
     double R = a / sqrt(1 - e_squared * pow(sin(lat), 2));
@@ -70,6 +74,7 @@ public:
 
     // estimate heading from consecutive poses
     double heading = atan2(N - N_prev, E - E_prev);
+    ROS_INFO("%f", heading);
     quat_tf.setRPY(0, 0, heading);
     quat_msg = tf2::toMsg(quat_tf);
     odom_msg.pose.pose.orientation = quat_msg;
