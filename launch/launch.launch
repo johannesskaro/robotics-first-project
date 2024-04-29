@@ -7,8 +7,20 @@
     <param name="alt_r" value="169.039" type="double" />
 </node>
 
+<node pkg="first_project" type = "odom_to_tf" name = "odom_of_encoders" output="screen">
+    <remap from="/input_odom" to="/odom"  />
+    <param name="root_frame" type="str" value="world" />
+    <param name="child_frame" type="str" value="wheel_odom" />
+</node>
+
+<node pkg="first_project" type = "odom_to_tf" name = "odom_of_gps" output="screen">
+    <remap from="/input_odom" to="/gps_odom" />
+    <param name="root_frame" type="str" value="world" />
+    <param name="child_frame" type="str" value="gps_odom" />
+</node>
+
+
 <!--
-<node pkg="first_project" type = "odom_to_tf" name = "odom_to_tf" output="screen"/>
 <node pkg="first_project" type = "lidar_visualization" name = "lidar_visualization" output="screen"/>
 -->
 </launch>
