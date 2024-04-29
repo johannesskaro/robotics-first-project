@@ -4,6 +4,7 @@
     <param name="lon_r" value="9.22674018" />
     <param name="alt_r" value="169.039" />
 </node>
+<node pkg="rviz" type="rviz" name="rviz" />
 
 
 <!--
