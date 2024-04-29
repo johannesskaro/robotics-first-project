@@ -15,7 +15,7 @@ private:
 
   double lat_ref_deg;
   double lon_ref_deg;
-  double alt_ref_deg;
+  double alt_ref_m;
 
   double a = 6378137; // Semi-major axis of earth given in meters
   double b = 6356752; // Semi-minor axis of earth given in meters
@@ -30,31 +30,32 @@ public:
     gps_sub = n.subscribe("/fix", 1, &gps_to_odom::gps_callback, this);
     n.getParam("lat_r", lat_ref_deg);
     n.getParam("lon_r", lon_ref_deg);
-    n.getParam("alt_r", alt_ref_deg);
+    n.getParam("alt_r", alt_ref_m);
   }
 
   void gps_callback(const sensor_msgs::NavSatFix::ConstPtr& msg) {
     double lat = msg->latitude * (M_PI / 180);
     double lon = msg->longitude * (M_PI / 180);
-    double alt = msg->altitude * (M_PI / 180);
+    double alt = msg->altitude;
 
     double lat_ref = lat_ref_deg * (M_PI / 180);
     double lon_ref = lon_ref_deg * (M_PI / 180);
-    double alt_ref = alt_ref_deg * (M_PI / 180);
+    double alt_ref = alt_ref_m;
 
     // convert from latitude-longitude-altitude to Cartesian ECEF
     double R = a / sqrt(1 - e_squared * pow(sin(lat), 2));
     double X = (R + alt) * cos(lat) * cos(lon);
     double Y = (R + alt) * cos(lat) * sin(lon);
-    double Z = ((pow(a, 2) / pow(b, 2)) * R + alt) * sin(lat);
-  
-    double X_zero = (R + alt_ref) * cos(lat_ref) * cos(lon_ref);
-    double Y_zero = (R + alt_ref) * cos(lat_ref) * sin(lon_ref);
-    double Z_zero = ((pow(a, 2) / pow(b, 2)) * R + alt_ref) * sin(lat_ref);
+    double Z = (R * (1 - e_squared) + alt) * sin(lat);
 
-    double X_diff = X - X_zero;
-    double Y_diff = Y - Y_zero;
-    double Z_diff = Z - Z_zero;
+    double R_ref = a / sqrt(1 - e_squared * pow(sin(lat_ref), 2));
+    double X_ref = (R_ref + alt_ref) * cos(lat_ref) * cos(lon_ref);
+    double Y_ref = (R_ref + alt_ref) * cos(lat_ref) * sin(lon_ref);
+    double Z_ref = (R_ref * (1 - e_squared) + alt_ref) * sin(lat_ref);
+
+    double X_diff = X - X_ref;
+    double Y_diff = Y - Y_ref;
+    double Z_diff = Z - Z_ref;
     
     // convert from Cartesian ECEF to ENU
     double E = (- sin(lon_ref)) * X_diff + (cos(lon_ref)) * Y_diff + (0) * Z_diff;
@@ -74,14 +75,14 @@ public:
 
     // estimate heading from consecutive poses
     double heading = atan2(N - N_prev, E - E_prev);
-    ROS_INFO("%f", heading);
+    //ROS_INFO("%f", heading);
     quat_tf.setRPY(0, 0, heading);
     quat_msg = tf2::toMsg(quat_tf);
     odom_msg.pose.pose.orientation = quat_msg;
 
     // publish
     // odom_msg.child_frame_id = "reach_rs";
-    odom_msg.header.frame_id = "reach_rs";
+    // odom_msg.header.frame_id = "reach_rs";
     gps_odom_pub.publish(odom_msg);
 
     // update
@@ -89,7 +90,6 @@ public:
     N_prev = N;
     U_prev = U;
   }
-
 };
 
 
