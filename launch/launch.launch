@@ -1,11 +1,9 @@
 <launch>
-<node pkg="first_project" type = "gps_to_odom" name = "gps_to_odom" output="screen">
-    <param name="lat_r" value="45.477669461666665" />
-    <param name="lon_r" value="9.22674018" />
-    <param name="alt_r" value="169.039" />
-</node>
+<node pkg="first_project" type = "gps_to_odom" name = "gps_to_odom" output="screen"/>
 <node pkg="rviz" type="rviz" name="rviz" />
-
+<param name="lat_r" value="45.477669461666665" type="double" />
+<param name="lon_r" value="9.22674018" type="double"/>
+<param name="alt_r" value="169.039" type="double" />
 
 <!--
 <node pkg="first_project" type = "odom_to_tf" name = "odom_to_tf" output="screen"/>
