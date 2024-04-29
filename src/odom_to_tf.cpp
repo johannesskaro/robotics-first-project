@@ -17,7 +17,7 @@ public:
     
 void callback(const nav_msgs::Odometry::ConstPtr& msg){
   tf::Transform transform;
-  transform.setOrigin(tf::Vector3(msg -> pose.pose.position.x, msg -> pose.pose.position.y, 0));
+  transform.setOrigin(tf::Vector3(msg -> pose.pose.position.x, msg -> pose.pose.position.y, msg -> pose.pose.position.z));
   tf::Quaternion q( msg->pose.pose.orientation.x,
                     msg->pose.pose.orientation.y,
                     msg->pose.pose.orientation.z,
@@ -38,7 +38,7 @@ int main(int argc, char **argv){
 
     ros::init(argc, argv, "odom_to_tf");
     odom_to_tf odom_to_tf;
-    ROS_INFO("%s", "hello odom_to_tf!");
+    ROS_INFO("%s", "Running odom_to_tf");
 
   	while (ros::ok()){
     	ros::spinOnce();

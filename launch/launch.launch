@@ -19,8 +19,5 @@
     <param name="child_frame" type="str" value="gps_odom" />
 </node>
 
-
-<!--
-<node pkg="first_project" type = "lidar_visualization" name = "lidar_visualization" output="screen"/>
--->
+<node pkg="first_project" type = "lidar_remap" name = "lidar_remap" output="screen"/>
 </launch>

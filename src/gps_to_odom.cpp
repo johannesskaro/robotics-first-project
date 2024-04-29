@@ -97,7 +97,7 @@ int main(int argc, char **argv){
 
     ros::init(argc, argv, "gps_to_odom");
     gps_to_odom gps_to_odom;
-    ROS_INFO("%s", "hello gps_to_odom!");
+    ROS_INFO("%s", "Running gps_to_odom");
 
   	while (ros::ok()){
     	ros::spinOnce();
