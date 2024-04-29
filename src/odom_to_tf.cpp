@@ -1,15 +1,20 @@
 #include "ros/ros.h"
 #include "nav_msgs/Odometry.h"
+#include "std_msgs/String.h"
 #include <tf/transform_broadcaster.h>
 #include <tf2/LinearMath/Quaternion.h>
-#include<tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 
 class odom_to_tf{
 public:
     odom_to_tf(){
-      sub = n.subscribe("/input_odom", 1000, &odom_to_tf::callback, this);
-      n.getParam("/odom_to_tf/root_frame", root_frame);
-      n.getParam("/odom_to_tf/child_frame", child_frame);
+      sub = n.subscribe("/input_odom", 1, &odom_to_tf::callback, this);
+      std::string root_frame_param_name = ros::this_node::getName() + "/root_frame";
+      std::string child_frame_param_name = ros::this_node::getName() + "/child_frame"; 
+      n.getParam(root_frame_param_name, root_frame);
+      n.getParam(child_frame_param_name, child_frame);
+      ROS_INFO("%s", root_frame.c_str());
+      ROS_INFO("%s", child_frame.c_str());
     }
     
 void callback(const nav_msgs::Odometry::ConstPtr& msg){
@@ -20,6 +25,8 @@ void callback(const nav_msgs::Odometry::ConstPtr& msg){
                     msg->pose.pose.orientation.z,
                     msg->pose.pose.orientation.w);
   transform.setRotation(q);
+  //std::string rf = static_cast<std::string>(root_frame);
+  //std::string cf = static_cast<std::string>(child_frame);
   br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), root_frame, child_frame));
   };
 

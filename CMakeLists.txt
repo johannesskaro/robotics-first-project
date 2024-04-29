@@ -11,7 +11,7 @@ generate_dynamic_reconfigure_options(
 ## Declare a catkin package
 catkin_package()
 
-## Build talker and listener
+## Build
 include_directories(include ${catkin_INCLUDE_DIRS})
 
 add_executable(gps_to_odom src/gps_to_odom.cpp)
