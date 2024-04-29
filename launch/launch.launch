@@ -7,8 +7,21 @@
 <node pkg="rviz" type="rviz" name="rviz" />
 
 
+
+<node pkg="first_project" type = "odom_to_tf" name = "odom_of_encoders" output="screen"/>
+    <param name="input_odom" value="/odom" />
+    <param name="root_frame" value="world" />
+    <param name="child_frame" value="wheel_odom" />
+</node>
+
+<node pkg="first_project" type = "odom_to_tf" name = "odom_of_gps" output="screen"/>
+    <param name="input_odom" value="/gps_odom" />
+    <param name="root_frame" value="world" />
+    <param name="child_frame" value="gps_odom" />
+</node>
+
+
 <!--
-<node pkg="first_project" type = "odom_to_tf" name = "odom_to_tf" output="screen"/>
 <node pkg="first_project" type = "lidar_visualization" name = "lidar_visualization" output="screen"/>
 -->
 </launch>
