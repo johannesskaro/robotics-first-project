@@ -13,8 +13,6 @@ public:
       std::string child_frame_param_name = ros::this_node::getName() + "/child_frame"; 
       n.getParam(root_frame_param_name, root_frame);
       n.getParam(child_frame_param_name, child_frame);
-      ROS_INFO("%s", root_frame.c_str());
-      ROS_INFO("%s", child_frame.c_str());
     }
     
 void callback(const nav_msgs::Odometry::ConstPtr& msg){
