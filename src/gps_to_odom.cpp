@@ -28,9 +28,9 @@ private:
 public:
   gps_to_odom() {
     gps_sub = n.subscribe("/fix", 1, &gps_to_odom::gps_callback, this);
-    n.getParam("lat_r", lat_ref_deg);
-    n.getParam("lon_r", lon_ref_deg);
-    n.getParam("alt_r", alt_ref_m);
+    n.getParam("/gps_to_odom/lat_r", lat_ref_deg);
+    n.getParam("/gps_to_odom/lon_r", lon_ref_deg);
+    n.getParam("/gps_to_odom/alt_r", alt_ref_m);
   }
 
   void gps_callback(const sensor_msgs::NavSatFix::ConstPtr& msg) {
