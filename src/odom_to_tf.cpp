@@ -25,8 +25,6 @@ void callback(const nav_msgs::Odometry::ConstPtr& msg){
                     msg->pose.pose.orientation.z,
                     msg->pose.pose.orientation.w);
   transform.setRotation(q);
-  //std::string rf = static_cast<std::string>(root_frame);
-  //std::string cf = static_cast<std::string>(child_frame);
   br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), root_frame, child_frame));
   };
 
