@@ -7,7 +7,9 @@
 class odom_to_tf{
 public:
     odom_to_tf(){
-      sub = n.subscribe("input_odom", 1000, &odom_to_tf::callback, this);
+      sub = n.subscribe("/input_odom", 1000, &odom_to_tf::callback, this);
+      n.getParam("/odom_to_tf/root_frame", root_frame);
+      n.getParam("/odom_to_tf/child_frame", child_frame);
     }
     
 void callback(const nav_msgs::Odometry::ConstPtr& msg){
@@ -18,13 +20,15 @@ void callback(const nav_msgs::Odometry::ConstPtr& msg){
                     msg->pose.pose.orientation.z,
                     msg->pose.pose.orientation.w);
   transform.setRotation(q);
-  br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "root_frame","child_frame"));
+  br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), root_frame, child_frame));
   };
 
 private:
   ros::NodeHandle n;
   tf::TransformBroadcaster br;
   ros::Subscriber sub;
+  std::string root_frame;
+  std::string child_frame;
 };
 
 int main(int argc, char **argv){

@@ -8,13 +8,13 @@
 </node>
 
 <node pkg="first_project" type = "odom_to_tf" name = "odom_of_encoders" output="screen"/>
-    <param name="input_odom" value="/odom" />
+    <remap from="/input_odom" to="/odom" />
     <param name="root_frame" value="world" />
     <param name="child_frame" value="wheel_odom" />
 </node>
 
 <node pkg="first_project" type = "odom_to_tf" name = "odom_of_gps" output="screen"/>
-    <param name="input_odom" value="/gps_odom" />
+    <remap from="/input_odom" to="/gps_odom" />
     <param name="root_frame" value="world" />
     <param name="child_frame" value="gps_odom" />
 </node>
