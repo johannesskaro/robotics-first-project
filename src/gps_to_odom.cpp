@@ -81,8 +81,6 @@ public:
     odom_msg.pose.pose.orientation = quat_msg;
 
     // publish
-    // odom_msg.child_frame_id = "reach_rs";
-    // odom_msg.header.frame_id = "reach_rs";
     gps_odom_pub.publish(odom_msg);
 
     // update
